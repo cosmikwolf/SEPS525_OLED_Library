@@ -1,5 +1,5 @@
-#ifndef _SEPS525_OLED_H_
-#define _SEPS525_OLED_H_
+#ifndef _SEPS525_OLED_SPI_H_
+#define _SEPS525_OLED_SPI_H_
 
 #include <Adafruit_GFX.h>
 

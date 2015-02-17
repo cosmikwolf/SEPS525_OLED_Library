@@ -2,9 +2,31 @@
 #include <SPI.h>
 #include <SEPS525_OLED_SPI.h>
 
-SEPS525_OLED display(7, 14, 10, 11, 12);
+//SEPS525_OLED display(11, 13, 16, 15, 10);
+SEPS525_OLED display(16, 15, 10);
 
 void setup(){
+
+   digitalWrite(13, LOW);
+   delay(200);
+   digitalWrite(13, HIGH);
+   delay(200);
+   digitalWrite(13, LOW);
+   delay(200);
+   digitalWrite(13, HIGH);
+   delay(200);
+   digitalWrite(13, LOW);
+   delay(200);
+   digitalWrite(13, HIGH);
+   delay(200);
+   digitalWrite(13, LOW);
+   delay(200);
+   digitalWrite(13, HIGH);
+   delay(200);
+   digitalWrite(13, LOW);
+   delay(200);
+   digitalWrite(13, HIGH);
+   delay(200);
    Serial.println("setup start");
 
       delay(300);
@@ -19,6 +41,27 @@ void setup(){
 }
 
 void loop(){
+
+   digitalWrite(13, LOW);
+   delay(100);
+   digitalWrite(13, HIGH);
+   delay(100);
+   digitalWrite(13, LOW);
+   delay(100);
+   digitalWrite(13, HIGH);
+   delay(100);
+   digitalWrite(13, LOW);
+   delay(100);
+   digitalWrite(13, HIGH);
+   delay(100);
+   digitalWrite(13, LOW);
+   delay(100);
+   digitalWrite(13, HIGH);
+   delay(100);
+   digitalWrite(13, LOW);
+   delay(100);
+   digitalWrite(13, HIGH);
+   delay(100);
    Serial.println("loop start");
    display.OLED_FillScreen_160128RGB(BLACK);                // fill screen with black
 

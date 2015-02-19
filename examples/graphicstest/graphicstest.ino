@@ -1,4 +1,4 @@
-#include <SEPS525_OLED.h>
+#include <seps525_oled.h>
 #include <Adafruit_GFX.h>
 #include <SPI.h>
 
@@ -12,7 +12,7 @@
 #define YELLOW  0xFFE0
 #define WHITE   0xFFFF
 
-SEPS525_OLED tft;
+seps525_oled tft;
 
 void setup(void) {
   Serial.begin(9600);

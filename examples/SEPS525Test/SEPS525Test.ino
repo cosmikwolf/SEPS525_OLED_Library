@@ -1,36 +1,14 @@
 #include <Adafruit_GFX.h>
 #include <SPI.h>
-#include <SEPS525_OLED_SPI.h>
+#include <seps525_oled_SPI.h>
 
-//SEPS525_OLED display(11, 13, 16, 15, 10);
-SEPS525_OLED display(16, 15, 10);
+//seps525_oled display(11, 13, 16, 15, 10);
+seps525_oled display(16, 15, 10);
 
 void setup(){
 
-   digitalWrite(13, LOW);
-   delay(200);
-   digitalWrite(13, HIGH);
-   delay(200);
-   digitalWrite(13, LOW);
-   delay(200);
-   digitalWrite(13, HIGH);
-   delay(200);
-   digitalWrite(13, LOW);
-   delay(200);
-   digitalWrite(13, HIGH);
-   delay(200);
-   digitalWrite(13, LOW);
-   delay(200);
-   digitalWrite(13, HIGH);
-   delay(200);
-   digitalWrite(13, LOW);
-   delay(200);
-   digitalWrite(13, HIGH);
-   delay(200);
    Serial.println("setup start");
-
-      delay(300);
-
+   delay(300);
    display.begin();
    Serial.begin(9600);
    Serial.println("setup complete");
@@ -42,28 +20,11 @@ void setup(){
 
 void loop(){
 
-   digitalWrite(13, LOW);
-   delay(100);
-   digitalWrite(13, HIGH);
-   delay(100);
-   digitalWrite(13, LOW);
-   delay(100);
-   digitalWrite(13, HIGH);
-   delay(100);
-   digitalWrite(13, LOW);
-   delay(100);
-   digitalWrite(13, HIGH);
-   delay(100);
-   digitalWrite(13, LOW);
-   delay(100);
-   digitalWrite(13, HIGH);
-   delay(100);
-   digitalWrite(13, LOW);
-   delay(100);
-   digitalWrite(13, HIGH);
-   delay(100);
    Serial.println("loop start");
+
+
    display.OLED_FillScreen_160128RGB(BLACK);                // fill screen with black
+
 
    display.OLED_NHDText_160128RGB(GREEN, BLACK);            // show NEWHAVEN DISPLAY
          delay(300);
@@ -89,10 +50,34 @@ void loop(){
 
    display.OLED_Spectrum_160128RGB();                       // show color spectrum
          delay(300);
-   display.OLED_FillScreen_160128RGB(BLACK);                // fill screen with black
+            display.OLED_FillScreen_160128RGB(WHITE);                // fill screen with black
    display.OLED_FillScreen_160128RGB(RED);                // fill screen with black
    display.OLED_FillScreen_160128RGB(GREEN);                // fill screen with black
    display.OLED_FillScreen_160128RGB(BLUE);                // fill screen with black
-   display.OLED_FillScreen_160128RGB(WHITE);                // fill screen with black
+   display.OLED_FillScreen_160128RGB(BLACK);                // fill screen with black
+
+
+  display.OLED_SetPosition_160128RGB(0,30);
+   display.OLED_WriteMemoryStart_160128RGB();
+   for(int i=0;i<100;i++)
+   {
+      display.OLED_Pixel_160128RGB(BLUE);
+   }
+
+
+  //display.drawPixel(80,50,100);
+  //display.drawPixel(80,51,RED);
+  //display.drawPixel(80,52,RED);
+  //display.drawPixel(80,53,0xFFFFFF);
+  //display.drawPixel(80,54,0xFFFFFF);
+  //display.drawPixel(80,55,0xFFFFFF);
+  //display.drawPixel(80,56,0xFFFFFF);
+  //display.drawPixel(80,57,RED);
+  //display.drawPixel(80,58,RED);
+  //display.drawPixel(80,59,RED);
+   //display.display();
+   delay(1000);
+     display.OLED_Init_160128RGB();                           // initialize display
+
 
 }

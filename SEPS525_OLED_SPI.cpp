@@ -1,4 +1,73 @@
-#include <SEPS525_OLED_SPI.h>
+#include <seps525_oled_SPI.h>
+
+static uint8_t buffer[SEPS525_LCDWIDTH * SEPS525_LCDHEIGHT / 8] = { 
+0x42, 0x4D, 0x40, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3E, 0x00, 0x00, 0x00, 0x28, 0x00,
+0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x02, 0x04, 0x00, 0x00, 0xAE, 0x13, 0x00, 0x00, 0xAE, 0x13, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFE, 0x7F, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFE, 0x7F, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFE, 0x47, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xF0,
+0x0E, 0x03, 0xC0, 0x1C, 0x1E, 0x07, 0xFF, 0x01, 0xE0, 0x0C, 0x13, 0x81, 0x87, 0xFF, 0xFF, 0xE0,
+0x06, 0x11, 0x80, 0x18, 0x0C, 0x03, 0xFE, 0x00, 0xC0, 0x08, 0x03, 0x00, 0x87, 0xFF, 0xFF, 0xC7,
+0xE2, 0x38, 0x9E, 0x31, 0xC0, 0xF1, 0xFC, 0x7C, 0x4F, 0x19, 0xC2, 0x3C, 0x1F, 0xFF, 0xFF, 0xCF,
+0xF2, 0x7C, 0x9F, 0x33, 0xE1, 0xF9, 0xF8, 0xFE, 0x0F, 0x99, 0xE2, 0x7E, 0x1F, 0xFF, 0xFF, 0xCF,
+0xF2, 0x7C, 0x80, 0x33, 0xF8, 0x01, 0xF9, 0xFF, 0x00, 0x19, 0xF2, 0x00, 0x1F, 0xFF, 0xFF, 0xCF,
+0xC2, 0x7C, 0xC0, 0x33, 0xF8, 0x01, 0xF9, 0xFF, 0x20, 0x19, 0xF2, 0x00, 0x1F, 0xFF, 0xFF, 0xFC,
+0x06, 0x7C, 0xCE, 0x33, 0xE1, 0xF9, 0xF9, 0xFF, 0xE7, 0x19, 0xF2, 0x7E, 0x1F, 0xFF, 0xFF, 0xF8,
+0x1E, 0x38, 0xCF, 0x33, 0xE0, 0xF1, 0xF9, 0xFF, 0xE7, 0x99, 0xE2, 0x3C, 0x1F, 0xFF, 0xFF, 0xE1,
+0xFE, 0x01, 0xC0, 0x30, 0x04, 0x61, 0xF9, 0xFF, 0xE0, 0x18, 0x43, 0x18, 0x07, 0xFF, 0xFF, 0xE3,
+0xE6, 0x01, 0xE0, 0x78, 0x0C, 0x03, 0xF9, 0xFF, 0x30, 0x3C, 0x03, 0x00, 0x07, 0xFF, 0xFF, 0xE7,
+0xE7, 0xFF, 0xFF, 0xFF, 0xFF, 0x0F, 0xF8, 0xFF, 0x3F, 0xFF, 0x13, 0xC3, 0x9F, 0xFF, 0xFF, 0xE7,
+0xC7, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFC, 0x7E, 0x3F, 0xFF, 0xF3, 0xFF, 0x9F, 0xFF, 0xFF, 0xE0,
+0x0F, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFE, 0x00, 0x7F, 0xFF, 0xF3, 0xFF, 0x9F, 0xFF, 0xFF, 0xF0,
+0x0F, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0xFF, 0xFF, 0xF3, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+};
+
+
 
 unsigned char Ascii_1[97][5] = {     // Refer to "Times New Roman" Font Database...
                         //   Basic Characters
@@ -331,12 +400,6 @@ static inline void seps525_datastart(void)
   // digitalWrite(pinRS, HIGH);
 }
 
-static inline void seps525_data(int value)
-{
-  // SPI.transfer((value>>8)& 0xFF);
-  // SPI.transfer(value & 0xFF);
-}
-
 static inline void seps525_dataend(void)
 {
   // digitalWrite(pinSS, HIGH);
@@ -355,15 +418,56 @@ static void seps525_set_region(int x, int y, int xs, int ys)
   // seps525_reg(0x21,y);
 }
 
-void SEPS525_OLED::drawPixel(int16_t x, int16_t y, uint16_t color)
-{
-  seps525_set_region(x, y, 1, 1);
-  seps525_datastart();
-  seps525_data(color);
-  seps525_dataend();
+void seps525_oled::drawPixel(int16_t x, int16_t y, uint16_t color) {
+  OLED_SetPosition_160128RGB(x,y);
+  OLED_WriteMemoryStart_160128RGB();
+  SPI.transfer(color);
+  /*
+  if ((x < 0) || (x >= width()) || (y < 0) || (y >= height()))
+    return;
+
+  // check rotation, move pixel around if necessary
+  switch (getRotation()) {
+  case 1:
+    swap(x, y);
+    x = WIDTH - x - 1;
+    break;
+  case 2:
+    x = WIDTH - x - 1;
+    y = HEIGHT - y - 1;
+    break;
+  case 3:
+    swap(x, y);
+    y = HEIGHT - y - 1;
+    break;
+  }  
+
+  // x is which column
+  if (color == WHITE) 
+    buffer[x+ (y/8)*SEPS525_LCDWIDTH] |= (1 << (y&7));  
+  else
+    buffer[x+ (y/8)*SEPS525_LCDWIDTH] &= ~(1 << (y&7)); 
+
+    */
 }
 
-void SEPS525_OLED::drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color)
+void seps525_oled::display(void) {
+
+  //OLED_SetColumnAddress_160128RGB(0, 159);
+  //OLED_SetRowAddress_160128RGB(0, 127);
+  
+  digitalWrite(cs_pin, LOW);               
+  digitalWrite(rs_pin, HIGH);
+
+  for (uint16_t i=0; i<(SEPS525_LCDWIDTH*SEPS525_LCDHEIGHT/8); i++) {
+    SPI.transfer(buffer[i]);
+  }
+  digitalWrite(cs_pin, HIGH);               
+
+}
+
+
+void seps525_oled::drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color)
 {
   seps525_set_region(x, y, 1, h);
   seps525_datastart();
@@ -372,7 +476,7 @@ void SEPS525_OLED::drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color
   seps525_dataend();
 }
 
-void SEPS525_OLED::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
+void seps525_oled::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
 {
   seps525_set_region(x, y, w, 1);
   seps525_datastart();
@@ -381,7 +485,7 @@ void SEPS525_OLED::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color
   seps525_dataend();
 }
 
-void SEPS525_OLED::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
+void seps525_oled::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
 {
   seps525_set_region(x, y, w, h);
   seps525_datastart();
@@ -390,13 +494,13 @@ void SEPS525_OLED::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t
   seps525_dataend();
 }
 
-uint16_t SEPS525_OLED::color565(uint8_t r, uint8_t g, uint8_t b)
+uint16_t seps525_oled::color565(uint8_t r, uint8_t g, uint8_t b)
 {
   return (r << 11) | (g << 5) | b;
 }
 
 
-SEPS525_OLED::SEPS525_OLED(int8_t SDI_PIN, int8_t SCL_PIN, int8_t RS_PIN, int8_t RES_PIN, int8_t CS_PIN) : Adafruit_GFX(160, 128) 
+seps525_oled::seps525_oled(int8_t SDI_PIN, int8_t SCL_PIN, int8_t RS_PIN, int8_t RES_PIN, int8_t CS_PIN) : Adafruit_GFX(160, 128) 
 {
   sdi_pin = SDI_PIN;
   scl_pin = SCL_PIN;
@@ -407,7 +511,7 @@ SEPS525_OLED::SEPS525_OLED(int8_t SDI_PIN, int8_t SCL_PIN, int8_t RS_PIN, int8_t
   hwSPI = false;
 }
 
-SEPS525_OLED::SEPS525_OLED(int8_t RS_PIN, int8_t RES_PIN, int8_t CS_PIN) : Adafruit_GFX(160, 128) 
+seps525_oled::seps525_oled(int8_t RS_PIN, int8_t RES_PIN, int8_t CS_PIN) : Adafruit_GFX(160, 128) 
 {
   rs_pin = RS_PIN;
   res_pin = RES_PIN;
@@ -417,7 +521,7 @@ SEPS525_OLED::SEPS525_OLED(int8_t RS_PIN, int8_t RES_PIN, int8_t CS_PIN) : Adafr
 }
 
 
-void SEPS525_OLED::begin(){
+void seps525_oled::begin(){
 
   DDRD = 0xFF;                                    // configure PORTD as output
   pinMode(rs_pin, OUTPUT);                        // configure rs_pin as output
@@ -430,7 +534,7 @@ void SEPS525_OLED::begin(){
     dcport      = portOutputRegister(digitalPinToPort(rs_pin));
     dcpinmask   = digitalPinToBitMask(rs_pin);
     SPI.begin();
-    SPI.beginTransaction(SPISettings(10000000000, MSBFIRST, SPI_MODE3));
+    SPI.beginTransaction(SPISettings(10000000000, MSBFIRST, SPI_MODE0));
    // SPI.setClockDivider(SPI_CLOCK_DIV2); // 8 MHz
   } else {
     digitalWrite(cs_pin, HIGH);                     // set cs_pin
@@ -453,188 +557,133 @@ MISO  Data Input     12
 17    /CS  - Active LOW Chip Select signal.  - Blue   - teensy pin 10
 */
 
-void SEPS525_OLED::OLED_Init_160128RGB(void)      //OLED initialization
+void seps525_oled::OLED_Init_160128RGB(void)      //OLED initialization
 {
     digitalWrite(res_pin, LOW);
     delay(500);
     digitalWrite(res_pin, HIGH);
     delay(500);
 
-    OLED_Command_160128RGB(0x04);// Set Normal Driving Current
-    OLED_Data_160128RGB(0x03);// Disable Oscillator Power Down
+    seps525_command(0x04);// Set Normal Driving Current
+    seps525_data(0x03);// Disable Oscillator Power Down
     delay(2);
-    OLED_Command_160128RGB(0x04); // Enable Power Save Mode
-    OLED_Data_160128RGB(0x00); // Set Normal Driving Current
+    seps525_command(0x04); // Enable Power Save Mode
+    seps525_data(0x00); // Set Normal Driving Current
     delay(2); // Disable Oscillator Power Down
-    OLED_Command_160128RGB(0x3B);
-    OLED_Data_160128RGB(0x00);
-    OLED_Command_160128RGB(0x02);
-    OLED_Data_160128RGB(0x01); // Set EXPORT1 Pin at Internal Clock
+    seps525_command(0x3B);
+    seps525_data(0x00);
+    seps525_command(0x02);
+    seps525_data(0x01); // Set EXPORT1 Pin at Internal Clock
     // Oscillator operates with external resister.
     // Internal Oscillator On
-    OLED_Command_160128RGB(0x03);
-    OLED_Data_160128RGB(0x90); // Set Clock as 90 Frames/Sec
-    OLED_Command_160128RGB(0x80);
-    OLED_Data_160128RGB(0x01); // Set Reference Voltage Controlled by External Resister
-    OLED_Command_160128RGB(0x08);// Set Pre-Charge Time of Red
-    OLED_Data_160128RGB(0x04);
-    OLED_Command_160128RGB(0x09);// Set Pre-Charge Time of Green
-    OLED_Data_160128RGB(0x05);
-    OLED_Command_160128RGB(0x0A);// Set Pre-Charge Time of Blue
-    OLED_Data_160128RGB(0x05);
-    OLED_Command_160128RGB(0x0B);// Set Pre-Charge Current of Red
-    OLED_Data_160128RGB(0x9D);
-    OLED_Command_160128RGB(0x0C);// Set Pre-Charge Current of Green
-    OLED_Data_160128RGB(0x8C);
-    OLED_Command_160128RGB(0x0D);// Set Pre-Charge Current of Blue
-    OLED_Data_160128RGB(0x57);
-    OLED_Command_160128RGB(0x10);// Set Driving Current of Red
-    OLED_Data_160128RGB(0x56);
-    OLED_Command_160128RGB(0x11);// Set Driving Current of Green
-    OLED_Data_160128RGB(0x4D);
-    OLED_Command_160128RGB(0x12);// Set Driving Current of Blue
-    OLED_Data_160128RGB(0x46);
-    OLED_Command_160128RGB(0x13);
-    OLED_Data_160128RGB(0xA0); // Set Color Sequence
-    OLED_Command_160128RGB(0x14);
-    OLED_Data_160128RGB(0x01); // Set MCU Interface Mode
-    OLED_Command_160128RGB(0x16);
-    OLED_Data_160128RGB(0x76); // Set Memory Write Mode
-    OLED_Command_160128RGB(0x28);
-    OLED_Data_160128RGB(0x7F); // 1/128 Duty (0x0F~0x7F)
-    OLED_Command_160128RGB(0x29);
-    OLED_Data_160128RGB(0x00); // Set Mapping RAM Display Start Line (0x00~0x7F)
-    OLED_Command_160128RGB(0x06);
-    OLED_Data_160128RGB(0x01); // Display On (0x00/0x01)
-    OLED_Command_160128RGB(0x05); // Disable Power Save Mode
-    OLED_Data_160128RGB(0x00); // Set All Internal Register Value as Normal Mode
-    OLED_Command_160128RGB(0x15);
-    OLED_Data_160128RGB(0x00); // Set RGB Interface Polarity as Active Low
+    seps525_command(SEPS525_CLOCK_DIV);
+    seps525_data(0xF0); // Set Clock as 90 Frames/Sec
+    seps525_command(0x80);
+    seps525_data(0x01); // Set Reference Voltage Controlled by External Resister
+    seps525_command(SEPS525_PRECHARGE_TIME_R);// Set Pre-Charge Time of Red
+    seps525_data(0x04);
+    seps525_command(SEPS525_PRECHARGE_TIME_G);// Set Pre-Charge Time of Green
+    seps525_data(0x05);
+    seps525_command(SEPS525_PRECHARGE_TIME_B);// Set Pre-Charge Time of Blue
+    seps525_data(0x05);
+    seps525_command(0x0B);// Set Pre-Charge Current of Red
+    seps525_data(0x9D);
+    seps525_command(0x0C);// Set Pre-Charge Current of Green
+    seps525_data(0x8C);
+    seps525_command(0x0D);// Set Pre-Charge Current of Blue
+    seps525_data(0x57);
+    seps525_command(0x10);// Set Driving Current of Red
+    seps525_data(0x56);
+    seps525_command(0x11);// Set Driving Current of Green
+    seps525_data(0x4D);
+    seps525_command(0x12);// Set Driving Current of Blue
+    seps525_data(0x46);
+    seps525_command(0x13);
+    seps525_data(0xA0); // Set Color Sequence
+    seps525_command(0x14);
+    seps525_data(0x01); // Set MCU Interface Mode
+    seps525_command(0x16);
+    seps525_data(0x76); // Set Memory Write Mode
+    seps525_command(0x28);
+    seps525_data(0x7F); // 1/128 Duty (0x0F~0x7F)
+    seps525_command(0x29);
+    seps525_data(0x00); // Set Mapping RAM Display Start Line (0x00~0x7F)
+    seps525_command(0x06);
+    seps525_data(0x01); // Display On (0x00/0x01)
+    seps525_command(0x05); // Disable Power Save Mode
+    seps525_data(0x00); // Set All Internal Register Value as Normal Mode
+    seps525_command(0x15);
+    seps525_data(0x00); // Set RGB Interface Polarity as Active Low
     OLED_SetColumnAddress_160128RGB(0, 159);
     OLED_SetRowAddress_160128RGB(0, 127);
 }
-void SEPS525_OLED::OLED_Command_160128RGB(unsigned char c)        // send command to OLED
+void seps525_oled::seps525_command(unsigned char c)        // send command to OLED
 {  
-  unsigned char i;
-  unsigned char mask = 0x80;
-   
   digitalWrite(cs_pin, LOW);               
   digitalWrite(rs_pin, LOW);
-  if(hwSPI){
-    SPI.transfer(c);
-  } else {
-    for(i=0;i<8;i++)
-    {
-       digitalWrite(scl_pin, LOW);
-       if((c & mask) >> 7 == 1)
-       {
-          digitalWrite(sdi_pin, HIGH);
-       }
-       else
-       {
-          digitalWrite(sdi_pin, LOW);
-       }
-       digitalWrite(scl_pin, HIGH);
-       c = c << 1;
-    }
-  }
+
+  SPI.transfer(c);
 
   digitalWrite(cs_pin, HIGH);
 } 
 
-void SEPS525_OLED::OLED_Data_160128RGB(unsigned char d)        // send data to OLED
+void seps525_oled::seps525_data(unsigned char d)        // send data to OLED
 { 
-  unsigned char i;
-  unsigned char mask = 0x80;
-   
   digitalWrite(cs_pin, LOW);               
   digitalWrite(rs_pin, HIGH);
-  if(hwSPI){
-    SPI.transfer(d);
-  } else {
-    for(i=0;i<8;i++)
-    {
-       digitalWrite(scl_pin, LOW);
-       if((d & mask) >> 7 == 1)
-       {
-          digitalWrite(sdi_pin, HIGH);
-       }
-       else
-       {
-          digitalWrite(sdi_pin, LOW);
-       }
-       digitalWrite(scl_pin, HIGH);
-       d = d << 1;
-    }
-  }
+
+  SPI.transfer(d);
+
   digitalWrite(cs_pin, HIGH);
 }
 
-void SEPS525_OLED::OLED_SerialPixelData_160128RGB(unsigned char d)    // serial write for pixel data
+void seps525_oled::OLED_SerialPixelData_160128RGB(unsigned char d)    // serial write for pixel data
 {
-   unsigned char i;
-   unsigned char mask = 0x80;
-   digitalWrite(cs_pin, LOW);               
-   digitalWrite(rs_pin, HIGH);
-
-  if(hwSPI){
-    SPI.transfer(d);
-  } else {
-   for(i=0;i<6;i++)
-   {
-     digitalWrite(scl_pin, LOW);
-     if((d & mask) >> 7 == 1)
-     {
-       digitalWrite(sdi_pin, HIGH);
-     }
-     else
-     {
-       digitalWrite(sdi_pin, LOW);
-     }
-     digitalWrite(scl_pin, HIGH);
-     d = d << 1;
-   }
- }
-   digitalWrite(cs_pin, HIGH);
+  digitalWrite(cs_pin, LOW);               
+  digitalWrite(rs_pin, HIGH);
+  
+  SPI.transfer(d);
+  
+  digitalWrite(cs_pin, HIGH);
 }
   
-void SEPS525_OLED::OLED_SetColumnAddress_160128RGB(unsigned char x_start, unsigned char x_end)    // set column address start + end
+void seps525_oled::OLED_SetColumnAddress_160128RGB(unsigned char x_start, unsigned char x_end)    // set column address start + end
 {
-    OLED_Command_160128RGB(0x17);
-    OLED_Data_160128RGB(x_start);
-    OLED_Command_160128RGB(0x18);
-    OLED_Data_160128RGB(x_end);
+    seps525_command(0x17);
+    seps525_data(x_start);
+    seps525_command(0x18);
+    seps525_data(x_end);
 }
 
-void SEPS525_OLED::OLED_SetRowAddress_160128RGB(unsigned char y_start, unsigned char y_end)    // set row address start + end
+void seps525_oled::OLED_SetRowAddress_160128RGB(unsigned char y_start, unsigned char y_end)    // set row address start + end
 {
-    OLED_Command_160128RGB(0x19);
-    OLED_Data_160128RGB(y_start);
-    OLED_Command_160128RGB(0x1A);
-    OLED_Data_160128RGB(y_end);
+    seps525_command(0x19);
+    seps525_data(y_start);
+    seps525_command(0x1A);
+    seps525_data(y_end);
 }
 
-void SEPS525_OLED::OLED_WriteMemoryStart_160128RGB(void)    // write to RAM command
+void seps525_oled::OLED_WriteMemoryStart_160128RGB(void)    // write to RAM command
 {
-    OLED_Command_160128RGB(0x22);
+    seps525_command(0x22);
 }
 
-void SEPS525_OLED::OLED_Pixel_160128RGB(unsigned long color)    // write one pixel of a given color
+void seps525_oled::OLED_Pixel_160128RGB(unsigned long color)    // write one pixel of a given color
 {
   OLED_SerialPixelData_160128RGB((color>>16));
   OLED_SerialPixelData_160128RGB((color>>8));
   OLED_SerialPixelData_160128RGB(color);
 }
 
-void SEPS525_OLED::OLED_SetPosition_160128RGB(unsigned char x_pos, unsigned char y_pos)    // set x,y address
+void seps525_oled::OLED_SetPosition_160128RGB(unsigned char x_pos, unsigned char y_pos)    // set x,y address
 {
-    OLED_Command_160128RGB(0x20);
-    OLED_Data_160128RGB(x_pos);
-    OLED_Command_160128RGB(0x21);
-    OLED_Data_160128RGB(y_pos);
+    seps525_command(0x20);
+    seps525_data(x_pos);
+    seps525_command(0x21);
+    seps525_data(y_pos);
 }
 
-void SEPS525_OLED::OLED_FillScreen_160128RGB(unsigned long color)    // fill screen with a given color
+void seps525_oled::OLED_FillScreen_160128RGB(unsigned long color)    // fill screen with a given color
 {
    unsigned int i;
    OLED_SetPosition_160128RGB(0,0);
@@ -656,7 +705,7 @@ void SEPS525_OLED::OLED_FillScreen_160128RGB(unsigned long color)    // fill scr
 /************ START **************/
 /*********************************/
 
-void SEPS525_OLED::OLED_Text_160128RGB(unsigned char x_pos, unsigned char y_pos, unsigned char letter, unsigned long textColor, unsigned long backgroundColor)  // function to show text
+void seps525_oled::OLED_Text_160128RGB(unsigned char x_pos, unsigned char y_pos, unsigned char letter, unsigned long textColor, unsigned long backgroundColor)  // function to show text
 {
     int i;
     int count;
@@ -678,7 +727,7 @@ void SEPS525_OLED::OLED_Text_160128RGB(unsigned char x_pos, unsigned char y_pos,
    }
 }
 
-void SEPS525_OLED::OLED_Text2x_160128RGB(unsigned char x_pos, unsigned char y_pos, unsigned char letter, unsigned long textColor, unsigned long backgroundColor)  // function to show text (2x size)
+void seps525_oled::OLED_Text2x_160128RGB(unsigned char x_pos, unsigned char y_pos, unsigned char letter, unsigned long textColor, unsigned long backgroundColor)  // function to show text (2x size)
 {
     int i;
     int count;
@@ -703,7 +752,7 @@ void SEPS525_OLED::OLED_Text2x_160128RGB(unsigned char x_pos, unsigned char y_po
    }
 }
 
-void SEPS525_OLED::OLED_NHDText_160128RGB(unsigned long textColor, unsigned long backgroundColor)    // function to show NEWHAVEN DISPLAY
+void seps525_oled::OLED_NHDText_160128RGB(unsigned long textColor, unsigned long backgroundColor)    // function to show NEWHAVEN DISPLAY
 {
     int i;
     int count;
@@ -1065,7 +1114,7 @@ void SEPS525_OLED::OLED_NHDText_160128RGB(unsigned long textColor, unsigned long
    }
 }
 
-void SEPS525_OLED::OLED_Icon_160128RGB(unsigned char x_pos, unsigned char y_pos)    // function to show icon
+void seps525_oled::OLED_Icon_160128RGB(unsigned char x_pos, unsigned char y_pos)    // function to show icon
 {
    unsigned int i, j;
    unsigned int incr = 0;
@@ -1084,7 +1133,7 @@ void SEPS525_OLED::OLED_Icon_160128RGB(unsigned char x_pos, unsigned char y_pos)
    }
 }
 
-void SEPS525_OLED::OLED_Spectrum_160128RGB(void)                  // function to show color spectrum
+void seps525_oled::OLED_Spectrum_160128RGB(void)                  // function to show color spectrum
 {
       unsigned char i, j;
       unsigned char blue, green, red;
@@ -1112,44 +1161,44 @@ void SEPS525_OLED::OLED_Spectrum_160128RGB(void)                  // function to
         OLED_Pixel_160128RGB(WHITE);
         for(j=0;j<26;j++)
         {
-          OLED_Data_160128RGB(blue);
-          OLED_Data_160128RGB(green);
-          OLED_Data_160128RGB(red);
+          seps525_data(blue);
+          seps525_data(green);
+          seps525_data(red);
           green += 9;
         }
         for(j=0;j<26;j++)
         {
-          OLED_Data_160128RGB(blue);
-          OLED_Data_160128RGB(green);
-          OLED_Data_160128RGB(red);
+          seps525_data(blue);
+          seps525_data(green);
+          seps525_data(red);
           red -= 9;
         }
         for(j=0;j<26;j++)
         {
-          OLED_Data_160128RGB(blue);
-          OLED_Data_160128RGB(green);
-          OLED_Data_160128RGB(red);
+          seps525_data(blue);
+          seps525_data(green);
+          seps525_data(red);
           blue += 9;
         }
         for(j=0;j<26;j++)
         {
-          OLED_Data_160128RGB(blue);
-          OLED_Data_160128RGB(green);
-          OLED_Data_160128RGB(red);
+          seps525_data(blue);
+          seps525_data(green);
+          seps525_data(red);
           green -= 9;
         }
         for(j=0;j<26;j++)
         {
-          OLED_Data_160128RGB(blue);
-          OLED_Data_160128RGB(green);
-          OLED_Data_160128RGB(red);
+          seps525_data(blue);
+          seps525_data(green);
+          seps525_data(red);
           red += 9;
         }
         for(j=0;j<26;j++)
         {
-          OLED_Data_160128RGB(blue);
-          OLED_Data_160128RGB(green);
-          OLED_Data_160128RGB(red);
+          seps525_data(blue);
+          seps525_data(green);
+          seps525_data(red);
           blue -= 9;
         }
         OLED_Pixel_160128RGB(WHITE);

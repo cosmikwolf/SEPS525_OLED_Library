@@ -392,36 +392,14 @@ const unsigned char smiley20x20[1200] = {
 0x10, 0xb3, 0xf5, 0x32, 0xbe, 0xf6, 0x62, 0xce, 0xf9, 0x00, 0x3e, 0x44, 0x22, 0x22, 0x22, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-static inline void seps525_datastart(void)
-{
-  // digitalWrite(pinSS, LOW);
-  // digitalWrite(pinRS, LOW);
-  // SPI.transfer(0x22);
-  // digitalWrite(pinRS, HIGH);
-}
-
-static inline void seps525_dataend(void)
-{
-  // digitalWrite(pinSS, HIGH);
-}
-
-static void seps525_set_region(int x, int y, int xs, int ys)
-{
-  // // draw region
-  // seps525_reg(0x17,x);
-  // seps525_reg(0x18,x+xs-1);
-  // seps525_reg(0x19,y);
-  // seps525_reg(0x1a,y+ys-1);
-  
-  // // start position
-  // seps525_reg(0x20,x);
-  // seps525_reg(0x21,y);
-}
 
 void seps525_oled::drawPixel(int16_t x, int16_t y, uint16_t color) {
   OLED_SetPosition_160128RGB(x,y);
   OLED_WriteMemoryStart_160128RGB();
-  SPI.transfer(color);
+  //SPI.transfer(color);
+  //spi4teensy3::send(color);
+  OLED_Pixel_160128RGB(color);
+
   /*
   if ((x < 0) || (x >= width()) || (y < 0) || (y >= height()))
     return;
@@ -460,43 +438,12 @@ void seps525_oled::display(void) {
   digitalWrite(rs_pin, HIGH);
 
   for (uint16_t i=0; i<(SEPS525_LCDWIDTH*SEPS525_LCDHEIGHT/8); i++) {
-    SPI.transfer(buffer[i]);
+    //SPI.transfer(buffer[i]);
+      spi4teensy3::send(buffer[i]);
+
   }
   digitalWrite(cs_pin, HIGH);               
 
-}
-
-
-void seps525_oled::drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color)
-{
-  seps525_set_region(x, y, 1, h);
-  seps525_datastart();
-  int n;
-  for(n = 0; n < h; n++) seps525_data(color);
-  seps525_dataend();
-}
-
-void seps525_oled::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
-{
-  seps525_set_region(x, y, w, 1);
-  seps525_datastart();
-  int n;
-  for(n = 0; n < w; n++) seps525_data(color);
-  seps525_dataend();
-}
-
-void seps525_oled::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
-{
-  seps525_set_region(x, y, w, h);
-  seps525_datastart();
-  int n;
-  for(n = 0; n < h*w; n++) seps525_data(color);
-  seps525_dataend();
-}
-
-uint16_t seps525_oled::color565(uint8_t r, uint8_t g, uint8_t b)
-{
-  return (r << 11) | (g << 5) | b;
 }
 
 
@@ -533,8 +480,10 @@ void seps525_oled::begin(){
     cspinmask   = digitalPinToBitMask(cs_pin);
     dcport      = portOutputRegister(digitalPinToPort(rs_pin));
     dcpinmask   = digitalPinToBitMask(rs_pin);
-    SPI.begin();
-    SPI.beginTransaction(SPISettings(10000000000, MSBFIRST, SPI_MODE0));
+    spi4teensy3::init(); 
+
+   // SPI.begin();
+    //SPI.beginTransaction(SPISettings(10000000000, MSBFIRST, SPI_MODE0));
    // SPI.setClockDivider(SPI_CLOCK_DIV2); // 8 MHz
   } else {
     digitalWrite(cs_pin, HIGH);                     // set cs_pin
@@ -581,11 +530,11 @@ void seps525_oled::OLED_Init_160128RGB(void)      //OLED initialization
     seps525_command(0x80);
     seps525_data(0x01); // Set Reference Voltage Controlled by External Resister
     seps525_command(SEPS525_PRECHARGE_TIME_R);// Set Pre-Charge Time of Red
-    seps525_data(0x04);
+    seps525_data(0x00);
     seps525_command(SEPS525_PRECHARGE_TIME_G);// Set Pre-Charge Time of Green
-    seps525_data(0x05);
+    seps525_data(0x00);
     seps525_command(SEPS525_PRECHARGE_TIME_B);// Set Pre-Charge Time of Blue
-    seps525_data(0x05);
+    seps525_data(0x00);
     seps525_command(0x0B);// Set Pre-Charge Current of Red
     seps525_data(0x9D);
     seps525_command(0x0C);// Set Pre-Charge Current of Green
@@ -600,10 +549,21 @@ void seps525_oled::OLED_Init_160128RGB(void)      //OLED initialization
     seps525_data(0x46);
     seps525_command(0x13);
     seps525_data(0xA0); // Set Color Sequence
-    seps525_command(0x14);
+    seps525_command(SEPS525_RGB_IF);
     seps525_data(0x01); // Set MCU Interface Mode
-    seps525_command(0x16);
-    seps525_data(0x76); // Set Memory Write Mode
+    seps525_command(SEPS525_MEMORY_WRITE_MODE);
+    seps525_data(0x70); // Set Memory Write Mode
+    seps525_command(SEPS525_MX1_ADDR);
+    seps525_data(0x00);
+    seps525_command(SEPS525_MX2_ADDR);
+    seps525_data(0x9F);
+    seps525_command(SEPS525_MY1_ADDR);
+    seps525_data(0x00);
+    seps525_command(SEPS525_MY2_ADDR);
+    seps525_data(0x9F);
+    seps525_command(0x2E);
+    seps525_data(0x9F);
+
     seps525_command(0x28);
     seps525_data(0x7F); // 1/128 Duty (0x0F~0x7F)
     seps525_command(0x29);
@@ -621,8 +581,8 @@ void seps525_oled::seps525_command(unsigned char c)        // send command to OL
 {  
   digitalWrite(cs_pin, LOW);               
   digitalWrite(rs_pin, LOW);
-
-  SPI.transfer(c);
+  spi4teensy3::send(c);
+  //SPI.transfer(c);
 
   digitalWrite(cs_pin, HIGH);
 } 
@@ -631,8 +591,9 @@ void seps525_oled::seps525_data(unsigned char d)        // send data to OLED
 { 
   digitalWrite(cs_pin, LOW);               
   digitalWrite(rs_pin, HIGH);
+  spi4teensy3::send(d);
 
-  SPI.transfer(d);
+  //SPI.transfer(d);
 
   digitalWrite(cs_pin, HIGH);
 }
@@ -641,8 +602,9 @@ void seps525_oled::OLED_SerialPixelData_160128RGB(unsigned char d)    // serial 
 {
   digitalWrite(cs_pin, LOW);               
   digitalWrite(rs_pin, HIGH);
-  
-  SPI.transfer(d);
+  spi4teensy3::send(d);
+
+  //SPI.transfer(d);
   
   digitalWrite(cs_pin, HIGH);
 }

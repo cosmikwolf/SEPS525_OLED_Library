@@ -1,7 +1,7 @@
 #define seps525_oled_SPI_H
 
 #include <Adafruit_GFX.h>
-#include <SPI.h>
+#include <spi4teensy3.h>
 
 typedef volatile uint8_t PortReg;
 typedef uint8_t PortMask;
@@ -86,12 +86,6 @@ class seps525_oled : public Adafruit_GFX {
 */
 	  void display();
 		void drawPixel(int16_t x, int16_t y, uint16_t color);
-
-		void drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
-		void drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
-		void fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
-		uint16_t color565(uint8_t r, uint8_t g, uint8_t b);
-
 		void seps525_command(unsigned char c);     // send command to OLED
 		void seps525_data(unsigned char d);        // send data to OLED
 
